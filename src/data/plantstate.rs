@@ -56,7 +56,76 @@ impl Input for PlantState {
     fn to_param(&self) -> Vec<f32> {
         vec![self.sun_exp,
             self.soil_moisture,
-            self.hrs_since_last_water
+            self.hrs_since_last_water / 10.0
+        ]
+    }
+    fn to_param_2d(&self) -> Vec<Vec<f32>> {
+        vec![self.to_param()]
+    }
+
+    fn to_param_3d(&self) -> Vec<Vec<Vec<f32>>> {
+        vec![vec![self.to_param()]]
+    }
+    
+    fn shape(&self) -> (usize, usize, usize) {
+        (3,1,1)
+    }
+    fn to_box(&self) -> Box<dyn Input> {
+        Box::new(self.to_param())        
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SunState {
+    id: u64,
+    sun_exp: f32,
+    hrs_in_sun: f32,
+    soil_moisture: f32,
+    sun: Vec<f32>,
+}
+
+impl SunState {
+    pub fn new(id: u64) -> Self {
+        let mut rng = thread_rng();
+
+        SunState { 
+            id,
+            sun_exp: rng.gen_range(0.0..1.0),
+            hrs_in_sun: rng.gen_range(0.0..10.0),
+            soil_moisture: rng.gen_range(0.0..1.0),
+            sun: vec![],
+        }
+    }
+
+    pub fn save<P: AsRef<Path>>(data: &[SunState], path: P) -> Result<(), Box<dyn Error>> {
+        let file = File::create(path)?;
+        serde_json::to_writer(file, &data)?;
+        Ok(())
+    }
+    pub fn get<P: AsRef<Path>>(path: P) -> Result<Vec<SunState>, Box<dyn Error>> {
+        let file = File::open(path)?;
+        let mut buf_reader = io::BufReader::new(file);
+        let mut contents = String::new();
+        buf_reader.read_to_string(&mut contents)?;
+
+        Ok(serde_json::from_str(&contents)?)
+    }
+    pub fn output(&self) -> f32 {
+        if self.sun.len() == 0 {
+            return 0f32
+        }
+        self.sun.iter().sum::<f32>() / self.sun.len() as f32
+    }
+    pub fn data_tuple(&self) -> (Vec<f32>, Vec<f32>) {
+        (self.to_param(), vec![self.output()])
+    }
+}
+
+impl Input for SunState {
+    fn to_param(&self) -> Vec<f32> {
+        vec![self.sun_exp,
+            self.soil_moisture,
+            self.hrs_in_sun / 10f32
         ]
     }
     fn to_param_2d(&self) -> Vec<Vec<f32>> {
