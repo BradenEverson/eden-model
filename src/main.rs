@@ -21,9 +21,9 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         plant_model.set_input(InputTypes::DENSE(data_tuple[0].0.len()));
 
-        plant_model.add_layer(LayerTypes::DENSE(8, Activations::SIGMOID, 0.001));
+        plant_model.add_layer(LayerTypes::DENSE(64, Activations::SIGMOID, 0.001));
+        plant_model.add_layer(LayerTypes::DENSE(128, Activations::SIGMOID, 0.001));
         plant_model.add_layer(LayerTypes::DENSE(32, Activations::SIGMOID, 0.001));
-        plant_model.add_layer(LayerTypes::DENSE(16, Activations::SIGMOID, 0.001));
 
         plant_model.add_layer(LayerTypes::DENSE(1, Activations::SIGMOID, 0.001));
 
