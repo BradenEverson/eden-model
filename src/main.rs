@@ -5,7 +5,7 @@ use unda::core::{data::input::Input, network::Network, layer::{layers::{InputTyp
 
 fn main() -> Result<(), Box<dyn Error>>{
     loop {
-        let sun = get_sun("sun.json")?; 
+        /*let sun = get_sun("sun.json")?; 
         let mut inputs: Vec<&dyn Input> = vec![];
         let mut outputs = vec![];
 
@@ -32,7 +32,7 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         sun_model.serialize_unda_fmt(&format!("sun_data_{:.2}_relu.unda", sun_model.loss * 100f32));
 
-        /*
+        */
         let plants = get_data("plants.json")?;
 
         let mut inputs: Vec<&dyn Input> = vec![];
@@ -50,19 +50,17 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         plant_model.set_input(InputTypes::DENSE(data_tuple[0].0.len()));
 
-        plant_model.add_layer(LayerTypes::DENSE(512, Activations::RELU, 0.001));
-        plant_model.add_layer(LayerTypes::DENSE(128, Activations::RELU, 0.001));
         plant_model.add_layer(LayerTypes::DENSE(32, Activations::RELU, 0.001));
+        plant_model.add_layer(LayerTypes::DENSE(16, Activations::RELU, 0.001));
 
         plant_model.add_layer(LayerTypes::DENSE(1, Activations::SIGMOID, 0.001));
 
         plant_model.compile();
 
-        plant_model.fit(&inputs, &outputs, 1000, 
+        plant_model.fit(&inputs, &outputs, 4, 
             ErrorTypes::MeanAbsolute);
 
         plant_model.serialize_unda_fmt(&format!("plant_data_{:.2}_sigmoid.unda", plant_model.loss * 100f32));
-        */
     }
 }
 
