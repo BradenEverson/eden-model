@@ -16,7 +16,7 @@ fn main() -> Result<(), Box<dyn Error>>{
             outputs.push(out.clone());
         });
 
-        let mut sun_model = Network::new(128);
+        let mut sun_model = Network::new(180);
 
         sun_model.set_input(InputTypes::DENSE(data_tuple[0].0.len()));
 
