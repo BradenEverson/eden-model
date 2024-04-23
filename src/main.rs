@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         let mut sun_model = Network::new(128);
 
-        sun_model.set_input(InputTypes::DENSE(3));
+        sun_model.set_input(InputTypes::DENSE(data_tuple[0].0.len()));
 
         sun_model.add_layer(LayerTypes::DENSE(1024, Activations::SIGMOID, 0.001));
         sun_model.add_layer(LayerTypes::DENSE(256, Activations::SIGMOID, 0.001));
