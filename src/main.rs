@@ -20,7 +20,6 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         sun_model.set_input(InputTypes::DENSE(data_tuple[0].0.len()));
 
-        sun_model.add_layer(LayerTypes::DENSE(64, Activations::SIGMOID, 0.001));
         sun_model.add_layer(LayerTypes::DENSE(16, Activations::SIGMOID, 0.001));
         sun_model.add_layer(LayerTypes::DENSE(8, Activations::SIGMOID, 0.001));
 
