@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         sun_model.compile();
 
-        sun_model.fit(&inputs, &outputs, 1000,
+        sun_model.fit(&inputs, &outputs, 4,
             ErrorTypes::MeanAbsolute);
 
         sun_model.serialize_unda_fmt(&format!("sun_data_{:.2}_relu.unda", sun_model.loss * 100f32));
