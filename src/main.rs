@@ -18,19 +18,22 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         let mut sun_model = Network::new(128);
 
-        sun_model.set_input(InputTypes::DENSE(4));
+        sun_model.set_input(InputTypes::DENSE(3));
 
+        sun_model.add_layer(LayerTypes::DENSE(1024, Activations::SIGMOID, 0.001));
+        sun_model.add_layer(LayerTypes::DENSE(256, Activations::SIGMOID, 0.001));
         sun_model.add_layer(LayerTypes::DENSE(64, Activations::SIGMOID, 0.001));
-        sun_model.add_layer(LayerTypes::DENSE(32, Activations::SIGMOID, 0.001));
         sun_model.add_layer(LayerTypes::DENSE(16, Activations::SIGMOID, 0.001));
 
         sun_model.add_layer(LayerTypes::DENSE(1, Activations::SIGMOID, 0.001));
 
         sun_model.compile();
 
-        sun_model.fit(&inputs, &outputs, 5, ErrorTypes::CategoricalCrossEntropy);
+        sun_model.fit(&inputs, &outputs, 1000,
+            ErrorTypes::MeanAbsolute);
 
-        sun_model.serialize_unda_fmt(&format!("sun_data_{:.2}_sigmoid.unda", sun_model.loss * 100f32));
+        sun_model.serialize_unda_fmt(&format!("sun_data_{:.2}_relu.unda", sun_model.loss * 100f32));
+
         /*
         let plants = get_data("plants.json")?;
 
@@ -49,15 +52,16 @@ fn main() -> Result<(), Box<dyn Error>>{
 
         plant_model.set_input(InputTypes::DENSE(data_tuple[0].0.len()));
 
-        plant_model.add_layer(LayerTypes::DENSE(512, Activations::SIGMOID, 0.001));
-        plant_model.add_layer(LayerTypes::DENSE(128, Activations::SIGMOID, 0.001));
-        plant_model.add_layer(LayerTypes::DENSE(32, Activations::SIGMOID, 0.001));
+        plant_model.add_layer(LayerTypes::DENSE(512, Activations::RELU, 0.001));
+        plant_model.add_layer(LayerTypes::DENSE(128, Activations::RELU, 0.001));
+        plant_model.add_layer(LayerTypes::DENSE(32, Activations::RELU, 0.001));
 
         plant_model.add_layer(LayerTypes::DENSE(1, Activations::SIGMOID, 0.001));
 
         plant_model.compile();
 
-        plant_model.fit(&inputs, &outputs, 5, ErrorTypes::CategoricalCrossEntropy);
+        plant_model.fit(&inputs, &outputs, 1000, 
+            ErrorTypes::MeanAbsolute);
 
         plant_model.serialize_unda_fmt(&format!("plant_data_{:.2}_sigmoid.unda", plant_model.loss * 100f32));
         */
